@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Consulta" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Consulta</h2>
+		<h:form id="formularioConsultaCliente" >
+			<p:dataTable
+				emptyMessage="Não possui dados cadastrados!"
+				value="#{ClienteBean.listaCliente}" var="cliente" rows="30"
+				paginator="true">
+				<p:column headerText="Id"
+					sortBy="#{cliente.idCliente}" filterBy="#{cliente.idCliente}" width="20">
+                        #{cliente.idCliente}
+                </p:column>
+				<p:column headerText="Nome"
+					sortBy="#{cliente.nome}" filterBy="#{cliente.nome}" width="100">
+                       #{cliente.nome}
+                </p:column>
+				<p:column headerText="Telefone"
+					sortBy="#{cliente.telefone}" filterBy="#{cliente.telefone}" width="80">
+                        #{cliente.telefone}
+                </p:column>
+				<p:column headerText="Email"
+					sortBy="#{cliente.email}"	filterBy="#{cliente.email}">
+                        #{cliente.email}
+                </p:column>
+                <p:column width="176">
+					<p:commandButton title="Editar" icon="ui-icon-search" update=":formulario"
+						 actionListener="#{ClienteBean.editar(cliente)}"  onclick="PF('consultaCliente').show();" />
+					<p:commandButton title="Remover"
+						actionListener="#{ClienteBean.remover(cliente)}" icon="ui-icon-trash"  process="@this" update=":formularioConsultaCliente, :mensagem" >
+						<p:confirm header="Exclusão de cliente" message="Tem certeza que deseja excluir o cliente?" icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" process="@this" />
+				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+			</p:confirmDialog>
+		</h:form>
+		
+		</ui:define>
+	
+		
+		<ui:define name="dialogos"> <p:dialog header="Editar" widgetVar="consultaCliente" modal="true">
+			
+			<h:form prependId="false" id="formulario">
+			
+			<h:panelGrid id="editar" columns="2">
+				<br/>
+				<h2>Dados Pessoais</h2>
+				<h:inputHidden id="idCliente" value="#{ClienteBean.cliente.idCliente}" />
+				
+				<p:outputLabel for="nome" value="nome" />
+				<p:inputText id="nome" value="#{ClienteBean.cliente.nome}"
+					size="60" placeholder="Digite um nome para o cliente..."
+					required="true" />
+
+				<p:outputLabel for="idade" value="idade" />
+				<p:inputText id="idade" value="#{ClienteBean.cliente.idade}" size="10" required="true"
+					validator="IdadeValidator" validatorMessage="Idade inválida!"/>
+
+				<p:outputLabel for="sexo" value="sexo" />
+				<p:selectOneRadio required="true" id="sexo" value="#{ClienteBean.cliente.sexo}">
+					<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+					<f:selectItem itemLabel="Feminino" itemValue="Femino" />
+				</p:selectOneRadio>
+
+				<p:outputLabel for="telefone" value="Telefone" />
+				<p:inputMask id="telefone" required="true" size="25"
+					placeholder="Ex.: (99) 9999-9999"
+					value="#{ClienteBean.cliente.telefone}" maxlength="15"
+					mask="(99) 9999-9999" converter="TelefoneConverter" />
+
+				<p:outputLabel for="email" value="Email" />
+				<p:inputMask id="email" required="true" size="25"
+					placeholder="Ex.: meu_email@hotmail.com"
+					value="#{ClienteBean.cliente.email}" maxlength="60"
+					validator="EmailValidator" validatorMessage="Email inválido!"/>
+				<br/>
+				<h2>Endereço</h2>
+				<h:inputHidden id="idEndereco" value="#{ClienteBean.cliente.endereco.idEndereco}" />
+				
+				<p:outputLabel for="rua" value="Rua" />
+				<p:inputText id="rua" value="#{ClienteBean.cliente.endereco.rua}"
+					size="60" required="true" />
+
+				<p:outputLabel for="numero" value="N°" />
+				<p:inputText id="numero"
+					value="#{ClienteBean.cliente.endereco.numero}" size="10" />
+
+				<p:outputLabel for="bairro" value="Bairro" />
+				<p:inputText id="bairro" value="#{ClienteBean.cliente.endereco.bairro}"
+					size="60" required="true" />
+				
+				<p:outputLabel for="cidade" value="Cidade" />
+				<p:inputText id="cidade"
+					value="#{ClienteBean.cliente.endereco.cidade}" size="60" />
+					
+				<p:outputLabel for="cep" value="CEP" />
+				<p:inputMask id="cep"
+					value="#{ClienteBean.cliente.endereco.cep}" size="25"
+					mask="99999-999" converter="CepConverter" validatorMessage="Cep inválido!"/>
+				
+			</h:panelGrid>
+			
+			<p:commandButton value="Atualizar" 
+					actionListener="#{ClienteBean.atualizar}" update=":formularioConsultaCliente" ajax="false" /> 
+			<p:commandButton  value="Limpar"  >
+                <p:ajax update="editar" resetValues="true" />
+            </p:commandButton>	
+		</h:form>
+			</p:dialog> 
+		</ui:define>
+		
+</ui:composition>

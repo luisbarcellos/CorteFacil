@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Cliente" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Cliente</h2>
+		<br />
+
+		<h:form>
+			<h:panelGrid id="panelGrid" columns="2">
+
+				<p:outputLabel for="nome" value="nome" />
+				<p:inputText id="nome" value="#{ClienteBean.cliente.nome}"
+					size="60" required="true" />
+
+				<p:outputLabel for="idade" value="idade" />
+				<p:inputText id="idade" value="#{ClienteBean.cliente.idade}" size="10" required="true"
+					validator="IdadeValidator" validatorMessage="Idade inválida!"/>
+
+				<p:outputLabel for="sexo" value="sexo" />
+				<p:selectOneRadio required="true" id="sexo" value="#{ClienteBean.cliente.sexo}">
+					<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+					<f:selectItem itemLabel="Feminino" itemValue="Femino" />
+				</p:selectOneRadio>
+
+				<p:outputLabel for="telefone" value="Telefone" />
+				<p:inputMask id="telefone" required="true" size="25"
+					placeholder="Ex.: (99) 9999-9999"
+					value="#{ClienteBean.cliente.telefone}" maxlength="15"
+					mask="(99) 9999-9999" converter="TelefoneConverter" />
+
+				<p:outputLabel for="email" value="Email" />
+				<p:inputMask id="email" required="true" size="25"
+					placeholder="Ex.: meu_email@hotmail.com"
+					value="#{ClienteBean.cliente.email}" maxlength="60"
+					validator="EmailValidator" validatorMessage="Email inválido!"/>
+					
+				<p:outputLabel for="rua" value="Rua" />
+				<p:inputText id="rua" value="#{ClienteBean.cliente.endereco.rua}"
+					size="60" required="true" />
+
+				<p:outputLabel for="numero" value="N°" />
+				<p:inputText id="numero"
+					value="#{ClienteBean.cliente.endereco.numero}" size="10" />
+
+				<p:outputLabel for="bairro" value="Bairro" />
+				<p:inputText id="bairro" value="#{ClienteBean.cliente.endereco.bairro}"
+					size="60" required="true" />
+				
+				<p:outputLabel for="cidade" value="Cidade" />
+				<p:inputText id="cidade"
+					value="#{ClienteBean.cliente.endereco.cidade}" size="60" />
+					
+				<p:outputLabel for="cep" value="CEP" />
+				<p:inputMask id="cep" placeholder="Ex.: 99999-999"
+					value="#{ClienteBean.cliente.endereco.cep}" size="25"
+					mask="99999-999" converter="CepConverter" validatorMessage="Cep inválido!"
+					/>
+			</h:panelGrid>
+			<div align="center">
+				<p:commandButton value="Salvar"
+					actionListener="#{ClienteBean.salvar}" ajax="false" />
+				<p:commandButton value="Limpar">
+					<p:ajax update="panelGrid" resetValues="true" />
+				</p:commandButton>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Consulta" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Consulta</h2>
+		<h:form id="formularioConsultaFornecedor" >
+			<p:dataTable
+				emptyMessage="Não possui dados cadastrados!"
+				value="#{FornecedorBean.listaFornecedor}" var="fornecedor" rows="30"
+				paginator="true">
+				<p:column headerText="Id"
+					sortBy="#{fornecedor.idFornecedor}" filterBy="#{fornecedor.idFornecedor}" width="20">
+                        #{fornecedor.idFornecedor}
+                </p:column>
+				<p:column headerText="Nome"
+					sortBy="#{fornecedor.nome}" filterBy="#{fornecedor.nome}" width="100">
+                       #{fornecedor.nome}
+                </p:column>
+				<p:column headerText="Telefone"
+					sortBy="#{fornecedor.telefone}" filterBy="#{fornecedor.telefone}" width="80">
+                        #{fornecedor.telefone}
+                </p:column>
+                <p:column headerText="Email"
+					sortBy="#{fornecedor.email}"	filterBy="#{fornecedor.email}" width="250">
+                        #{fornecedor.email}
+                </p:column>
+                <p:column width="50">
+					<p:commandButton title="Editar" icon="ui-icon-search" update=":formulario"
+						 actionListener="#{FornecedorBean.editar(fornecedor)}"  onclick="PF('consultaFornecedor').show();" />
+					<p:commandButton title="Remover"
+						actionListener="#{FornecedorBean.remover(fornecedor)}" icon="ui-icon-trash"  process="@this" update=":formularioConsultaFornecedor, :mensagem" >
+						<p:confirm header="Exclusão de fornecedor" message="Tem certeza que deseja excluir o fornecedor?" icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" process="@this" />
+				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+			</p:confirmDialog>
+		</h:form>
+		
+		</ui:define>
+	
+		
+		<ui:define name="dialogos"> <p:dialog header="Editar" widgetVar="consultaFornecedor" modal="true">
+			
+			<h:form prependId="false" id="formulario">
+			
+			<h:panelGrid id="editar" columns="2">
+				<br/>
+				<h2>Dados Pessoais</h2>
+				<h:inputHidden id="idFornecedor" value="#{FornecedorBean.fornecedor.idFornecedor}" />
+				
+				<p:outputLabel for="nome" value="nome" />
+				<p:inputText id="nome" value="#{FornecedorBean.fornecedor.nome}"
+					size="60" required="true" />
+
+				<p:outputLabel for="telefone" value="Telefone" />
+				<p:inputMask id="telefone" required="true" size="25"
+					placeholder="Ex.: (99) 9999-9999"
+					value="#{FornecedorBean.fornecedor.telefone}" maxlength="15"
+					mask="(99) 9999-9999" converter="TelefoneConverter" />
+				
+				<p:outputLabel for="email" value="Email" />
+				<p:inputMask id="email" required="true" size="25"
+					placeholder="Ex.: meu_email@hotmail.com"
+					value="#{FornecedorBean.fornecedor.email}" maxlength="60"
+					validator="EmailValidator" validatorMessage="Email inválido!"/>
+				<br/>
+				<h2>Endereço</h2>
+				<h:inputHidden id="idEndereco" value="#{FornecedorBean.fornecedor.endereco.idEndereco}" />
+				
+				<p:outputLabel for="rua" value="Rua" />
+				<p:inputText id="rua" value="#{FornecedorBean.fornecedor.endereco.rua}"
+					size="60" required="true" />
+
+				<p:outputLabel for="numero" value="N°" />
+				<p:inputText id="numero"
+					value="#{FornecedorBean.fornecedor.endereco.numero}" size="10" />
+
+				<p:outputLabel for="bairro" value="Bairro" />
+				<p:inputText id="bairro" value="#{FornecedorBean.fornecedor.endereco.bairro}"
+					size="60" required="true" />
+				
+				<p:outputLabel for="cidade" value="Cidade" />
+				<p:inputText id="cidade"
+					value="#{FornecedorBean.fornecedor.endereco.cidade}" size="60" />
+					
+				<p:outputLabel for="cep" value="CEP" />
+				<p:inputMask id="cep"
+					value="#{FornecedorBean.fornecedor.endereco.cep}" size="25"
+					mask="99999-999" converter="CepConverter" validatorMessage="Cep inválido!"/>
+				
+			</h:panelGrid>
+			
+			<p:commandButton value="Atualizar" 
+					actionListener="#{FornecedorBean.atualizar}" update=":formularioConsultaFornecedor" ajax="false" /> 
+			<p:commandButton  value="Limpar"  >
+                <p:ajax update="editar" resetValues="true" />
+            </p:commandButton>	
+		</h:form>
+			</p:dialog> 
+		</ui:define>
+</ui:composition>

@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title><ui:insert name="titulo">Corte Fácil</ui:insert></title>
+</h:head>
+<h:body>
+	<f:view>
+		<p:layout fullPage="true">
+			<div align="center">
+				<p:layoutUnit position="north" size="110">
+					<h1>Corte Fácil</h1>
+				</p:layoutUnit>
+			</div>
+			<p:layoutUnit position="west" size="260">
+				<h:form>
+					<p:megaMenu orientation="horizontal" style="margin-top:20px">
+						<p:submenu label="Cadastrar" icon="ui-icon-plus">
+							<p:column>
+								<p:submenu label="Cadastrar">
+									<p:menuitem value="Cliente" outcome="cadastrarCliente" />
+									<p:menuitem value="Fornecedor" outcome="cadastrarFornecedor" />
+									<p:menuitem value="Produto" outcome="cadastrarProduto" />
+								</p:submenu>
+							</p:column>
+						</p:submenu>
+
+						<p:submenu label="Consultar" icon="ui-icon-search">
+							<p:column>
+								<p:submenu label="Consultar">
+									<p:menuitem value="Cliente" outcome="consultarCliente"/>
+									<p:menuitem value="Fornecedor" outcome="consultarFornecedor" />
+									<p:menuitem value="Produto" url="#" />
+								</p:submenu>
+							</p:column>
+						</p:submenu>
+					</p:megaMenu>
+				</h:form>
+
+			</p:layoutUnit>
+			<p:layoutUnit position="center">
+				<f:facet name="cabecalho">
+					<ui:insert name="titulo" />
+				</f:facet>
+				<div align="center">
+					<ui:insert name="conteudo" />
+					<p:growl id="mensagem" />
+				</div>
+
+			</p:layoutUnit>
+			<div align="center">
+				<p:layoutUnit position="south" header="Estética da Rose"/>
+			</div>
+		</p:layout>
+		<ui:insert name="dialogos" />
+	</f:view>
+</h:body>
+</html>
