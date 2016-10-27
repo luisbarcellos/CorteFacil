@@ -15,7 +15,7 @@
 		<h2>Produto</h2>
 		<br />
 
-		<h:form>
+		<h:form id="formularioCadastroProduto">
 			<h:panelGrid id="panelGrid" columns="2">
 
 				<p:outputLabel for="nome" value="Nome" />
@@ -34,10 +34,31 @@
 				<p:inputText id="descricao" value="#{ProdutoBean.produto.descricao}"
 					size="60" required="true" />
 			</h:panelGrid>
-
+			<br/>
+			<p:dataTable id="listaFornecedor" emptyMessage="Não possui dados cadastrados!"
+				value="#{ProdutoBean.listaFornecedor}" var="fornecedor" rows="30" style="width:700px;"
+				paginator="true">
+				<f:facet name="header">
+                      Associar fornecedores
+                </f:facet>                      
+				<p:column headerText="Id"
+					sortBy="#{fornecedor.idFornecedor}" filterBy="#{fornecedor.idFornecedor}" width="20">
+                        #{fornecedor.idFornecedor}
+                </p:column>
+				<p:column headerText="Nome"
+					sortBy="#{fornecedor.nome}" filterBy="#{fornecedor.nome}" width="10px">
+                       #{fornecedor.nome}
+                </p:column>
+				
+                <p:column width="20">
+					<p:commandButton title="Adicionar" icon="ui-icon-plus" ajax="false" 
+					actionListener="#{ProdutoBean.adicionarFornecedor(fornecedor)}" update="listaFornecedor"/>
+				</p:column>
+			</p:dataTable>
+			<br/>
 			<div align="center">
 				<p:commandButton value="Salvar"
-					actionListener="#{ProdutoBean.salvar}" ajax="false" />
+					actionListener="#{ProdutoBean.salvar}" ajax="false" update="formularioCadastroProduto"/>
 				<p:commandButton value="Limpar">
 					<p:ajax update="panelGrid" resetValues="true" />
 				</p:commandButton>

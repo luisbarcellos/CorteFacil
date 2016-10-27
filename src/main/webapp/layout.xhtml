@@ -18,27 +18,29 @@
 			</div>
 			<p:layoutUnit position="west" size="260">
 				<h:form>
-					<p:megaMenu orientation="horizontal" style="margin-top:20px">
-						<p:submenu label="Cadastrar" icon="ui-icon-plus">
-							<p:column>
-								<p:submenu label="Cadastrar">
-									<p:menuitem value="Cliente" outcome="cadastrarCliente" />
-									<p:menuitem value="Fornecedor" outcome="cadastrarFornecedor" />
-									<p:menuitem value="Produto" outcome="cadastrarProduto" />
-								</p:submenu>
-							</p:column>
-						</p:submenu>
-
-						<p:submenu label="Consultar" icon="ui-icon-search">
-							<p:column>
-								<p:submenu label="Consultar">
-									<p:menuitem value="Cliente" outcome="consultarCliente"/>
-									<p:menuitem value="Fornecedor" outcome="consultarFornecedor" />
-									<p:menuitem value="Produto" url="#" />
-								</p:submenu>
-							</p:column>
-						</p:submenu>
-					</p:megaMenu>
+					<p:fieldset legend="Menu">
+						<p:megaMenu orientation="horizontal" >
+							<p:submenu label="Cadastrar" icon="ui-icon-plus">
+								<p:column>
+									<p:submenu label="Cadastrar">
+										<p:menuitem value="Cliente" outcome="cadastrarCliente" />
+										<p:menuitem value="Fornecedor" outcome="cadastrarFornecedor" />
+										<p:menuitem value="Produto" outcome="cadastrarProduto" />
+									</p:submenu>
+								</p:column>
+							</p:submenu>
+	
+							<p:submenu label="Consultar" icon="ui-icon-search">
+								<p:column>
+									<p:submenu label="Consultar">
+										<p:menuitem value="Cliente" outcome="consultarCliente"/>
+										<p:menuitem value="Fornecedor" outcome="consultarFornecedor" />
+										<p:menuitem value="Produto" url="#" />
+									</p:submenu>
+								</p:column>
+							</p:submenu>
+						</p:megaMenu>
+					</p:fieldset>
 				</h:form>
 
 			</p:layoutUnit>
