@@ -36,8 +36,6 @@ public class ProdutoBean extends BaseBean implements Serializable {
 	
 	private Produto produto = new Produto();
 	
-	private boolean visibilidadeListaFornecedor = false;
-	
 	@PostConstruct
 	public void initIt(){
 		listaFornecedor = auxFornecedorEJB.listarTodos();
@@ -53,7 +51,13 @@ public class ProdutoBean extends BaseBean implements Serializable {
 	public void editar(Produto produto) {
 		this.produto = produto;
 	}
-
+	
+	public void editarFornecedorProduto(Produto produto){
+		this.produto = produto;
+		ArrayList<Fornecedor> auxListaFornecedor = new ArrayList();
+		auxListaFornecedor = (ArrayList<Fornecedor>) produto.getListaFornecedor();
+		listaFornecedor.removeAll(produto.getListaFornecedor());
+	}
 	public void salvar() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		String mensagem;
@@ -87,12 +91,28 @@ public class ProdutoBean extends BaseBean implements Serializable {
 		}
 	}
 	
-	public void adicionarFornecedor(Fornecedor fornecedor){
+	public void adicionarFornecedorAoCadastrar(Fornecedor fornecedor){
 		FacesContext context = FacesContext.getCurrentInstance();
 		String mensagem;
 		try {
 			produto.getListaFornecedor().add(fornecedor);
 			listaFornecedor.remove(fornecedor);
+			mensagem = context.getApplication().evaluateExpressionGet(context, "Fornecedor adicionado com sucesso!",
+					String.class);
+			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
+		} catch (Exception e) {
+			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao adicionar fornecedor!", String.class);
+			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
+		}
+	}
+	
+	public void adicionarFornecedorAoAtualizar(Fornecedor fornecedor){
+		FacesContext context = FacesContext.getCurrentInstance();
+		String mensagem;
+		try {
+			produto.getListaFornecedor().add(fornecedor);
+			listaFornecedor.remove(fornecedor);
+			auxProdutoEJB.atualizar(produto);
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Fornecedor adicionado com sucesso!",
 					String.class);
 			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
@@ -114,13 +134,6 @@ public class ProdutoBean extends BaseBean implements Serializable {
 			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
 		}
 		
-	}
-	
-	public boolean getVisibilidadeListaFornecedor(){
-		return this.visibilidadeListaFornecedor;
-	}
-	public void visibilidadeListaFornecedorTrue(){
-		this.visibilidadeListaFornecedor = true;
 	}
 
 	public List<Produto> getListaProduto() {

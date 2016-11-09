@@ -24,17 +24,6 @@ public class ProdutoDAOImpl implements ProdutoDAO{
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
-		Fornecedor f = new Fornecedor();
-		f.setNome("Teste");
-		f.setTelefone("212121212");
-		f.setEmail("teste@teste.com");
-		f.getEndereco().setNumero(10);
-		f.getEndereco().setBairro("teste");
-		f.getEndereco().setCep("91540220");
-		f.getEndereco().setCidade("Teste");
-		f.getEndereco().setRua("Teste");
-		//produto.getListaFornecedor().add(f);
-		
 		sessao.saveOrUpdate(produto);
 		sessao.flush();
 		sessao.getTransaction().commit();
@@ -45,6 +34,7 @@ public class ProdutoDAOImpl implements ProdutoDAO{
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
+		produto.getListaFornecedor().removeAll(produto.getListaFornecedor());
 		sessao.delete(produto);
 		sessao.flush();
 		sessao.getTransaction().commit();
@@ -63,16 +53,12 @@ public class ProdutoDAOImpl implements ProdutoDAO{
 	}
 
 	public void atualizar(Produto produto) {
-		/*if (!sessao.isOpen()) {
+		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
-		sessao.clear();
 		sessao.beginTransaction();
-		fornecedor.getEndereco().setFornecedor(fornecedor);
+		sessao.update(produto);
 		sessao.flush();
-		sessao.clear();
-		sessao.saveOrUpdate(fornecedor);
-		sessao.flush();
-		sessao.getTransaction().commit();*/	
+		sessao.getTransaction().commit();
 	}
 }
