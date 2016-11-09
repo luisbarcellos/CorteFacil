@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Consulta" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Consulta</h2>
+		<h:form id="formularioConsultaProduto">
+			<p:dataTable id="tabelaProduto"
+				emptyMessage="Não possui dados cadastrados!"
+				value="#{ProdutoBean.listaProduto}" var="produto" rows="30"
+				paginator="true">
+				<p:column headerText="Id" sortBy="#{produto.idProduto}"
+					filterBy="#{produto.idProduto}" width="20">
+                        #{produto.idProduto}
+                </p:column>
+				<p:column headerText="Nome" sortBy="#{produto.nome}"
+					filterBy="#{produto.nome}" width="100">
+                       #{produto.nome}
+                </p:column>
+				<p:column headerText="Quantidade" sortBy="#{produto.quantidade}"
+					filterBy="#{produto.quantidade}" width="80">
+                        #{produto.quantidade}
+                </p:column>
+				<p:column headerText="Valor" sortBy="#{produto.valor}"
+					filterBy="#{produto.valor}" width="80">
+                        #{produto.valor}
+                </p:column>
+				<p:column headerText="Descrição" width="250">
+					#{produto.descricao}
+                </p:column>
+				<p:column width="65">
+					<p:commandButton title="Editar" icon="ui-icon-search"
+						update=":formularioEditaFornecedor"
+						actionListener="#{ProdutoBean.editarFornecedorProduto(produto)}"
+						onclick="PF('editaFornecedor').show();" />
+
+					<p:commandButton title="Remover"
+						actionListener="#{ProdutoBean.remover(produto)}"
+						icon="ui-icon-trash" process="@this"
+						update=":formularioConsultaProduto, :mensagem">
+						<p:confirm header="Exclusão de produto"
+							message="Tem certeza que deseja excluir o produto?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					process="@this" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="dialogos">
+		<p:dialog header="Editar Fornecedor" widgetVar="editaFornecedor" height="550"
+			modal="true">
+
+			<h:form prependId="false" id="formularioEditaFornecedor">
+				<p:fieldset legend="Fornecedores do Produto">
+					<p:dataTable id="tabelaFornecedorDoProduto"
+						emptyMessage="Não possui dados cadastrados!"
+						value="#{ProdutoBean.produto.listaFornecedor}" var="fornecedor" rows="5"
+						paginator="true">
+						<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
+							filterBy="#{fornecedor.idFornecedor}" width="20">
+                        #{fornecedor.idFornecedor}
+                </p:column>
+						<p:column headerText="Nome" sortBy="#{fornecedor.nome}"
+							filterBy="#{fornecedor.nome}" width="100">
+                       #{fornecedor.nome}
+                </p:column>
+						<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}"
+							filterBy="#{fornecedor.telefone}" width="80">
+                        #{fornecedor.telefone}
+                </p:column>
+						<p:column headerText="Email" sortBy="#{fornecedor.email}"
+							filterBy="#{fornecedor.email}" width="250">
+                        #{fornecedor.email}
+                </p:column>
+						<p:column width="50">
+							<p:commandButton title="Remover Fornecedor" icon="ui-icon-minus"
+								update=":formularioConsultaProduto"
+								actionListener="#{ProdutoBean.adicionarFornecedorAoAtualizar(fornecedor)}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+				<br />
+				<p:fieldset legend="Fornecedores Cadastrados">
+					<p:dataTable id="tabelaFornecedoresDisponiveis"
+						emptyMessage="Não possui dados cadastrados!"
+						value="#{ProdutoBean.listaFornecedor}" var="fornecedor" rows="5"
+						paginator="true">
+						<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
+							filterBy="#{fornecedor.idFornecedor}" width="20">
+                        #{fornecedor.idFornecedor}
+                </p:column>
+						<p:column headerText="Nome" sortBy="#{fornecedor.nome}"
+							filterBy="#{fornecedor.nome}" width="100">
+                       #{fornecedor.nome}
+                </p:column>
+						<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}"
+							filterBy="#{fornecedor.telefone}" width="80">
+                        #{fornecedor.telefone}
+                </p:column>
+						<p:column headerText="Email" sortBy="#{fornecedor.email}"
+							filterBy="#{fornecedor.email}" width="250">
+                        #{fornecedor.email}
+                </p:column>
+						<p:column width="50">
+							<p:commandButton title="Adicionar Fornecedor" icon="ui-icon-plus"
+								update=":formularioConsultaProduto"
+								actionListener="#{ProdutoBean.adicionarFornecedorAoAtualizar(fornecedor)}" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
