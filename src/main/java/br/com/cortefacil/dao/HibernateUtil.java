@@ -22,5 +22,4 @@ public class HibernateUtil {
 		System.out.println(SESSION_FACTORY);
 		return SESSION_FACTORY;
 	}
-
 }

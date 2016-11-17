@@ -1,11 +1,16 @@
 package br.com.cortefacil.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,7 +19,11 @@ public class Servico {
 	@Id
     @GeneratedValue
 	private Integer idServico;
-	private List<Produto> produtos;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	 @JoinTable(name="servico_produto",joinColumns={@JoinColumn(name="idservico")}, 
+    inverseJoinColumns={@JoinColumn(name="idproduto")})
+	private List<Produto> listaProdutos = new ArrayList<Produto>();
 	
 	@Column(name = "descricao")
 	private String descricao;
@@ -28,12 +37,7 @@ public class Servico {
 	public void setIdServico(Integer idServico) {
 		this.idServico = idServico;
 	}
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
-	}
+	
 	public String getDescricao() {
 		return descricao;
 	}
@@ -45,5 +49,15 @@ public class Servico {
 	}
 	public void setValor(double valor) {
 		this.valor = valor;
+	}
+	public List<Produto> getListaProdutos() {
+		return listaProdutos;
+	}
+	public void setListaProdutos(List<Produto> listaProdutos) {
+		this.listaProdutos = listaProdutos;
+	}
+	
+	public void adicionaValor(double valor){
+		this.valor = this.valor + valor;
 	}
 }

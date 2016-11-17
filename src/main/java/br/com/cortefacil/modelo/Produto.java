@@ -37,6 +37,9 @@ public class Produto {
      inverseJoinColumns={@JoinColumn(name="idfornecedor")})
 	private List<Fornecedor> listaFornecedor = new ArrayList<Fornecedor>();
 	
+	@ManyToMany(mappedBy = "listaProdutos")
+	private List<Servico> listaServico;
+	
 	public Integer getIdProduto() {
 		return idProduto;
 	}
@@ -72,5 +75,11 @@ public class Produto {
 	}
 	public void setListaFornecedor(List<Fornecedor> listaFornecedor) {
 		this.listaFornecedor = listaFornecedor;
-	}	
+	}
+	/*public List<Servico> getListaServico() {
+		return listaServico;
+	}
+	public void setListaServico(List<Servico> listaServico) {
+		this.listaServico = listaServico;
+	}*/	
 }

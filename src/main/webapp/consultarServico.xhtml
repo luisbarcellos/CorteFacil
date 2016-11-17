@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Consulta" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Consulta</h2>
+		<h:form id="formularioConsultaServico">
+			<p:dataTable id="tabelaServico" 
+				emptyMessage="Não possui dados cadastrados!"
+				value="#{ServicoBean.listaServico}" var="servico" rows="30"
+				paginator="true">
+				<p:column headerText="Id"
+					sortBy="#{servico.idServico}" filterBy="#{servico.idServico}" width="20">
+                        #{servico.idServico}
+                </p:column>
+				<p:column headerText="Nome"
+					sortBy="#{servico.valor}" filterBy="#{servico.valor}" width="100">
+                       #{servico.valor}
+                </p:column>
+				<p:column headerText="Descrição" width="250">
+					#{servico.descricao}
+                </p:column>
+                <p:column width="110">	
+					<p:commandButton title="Editar Serviço" icon="ui-icon-pencil"  update=":formularioEditaServico"
+						 actionListener="#{ServicoBean.editar(servico)}" onclick="PF('consultaServico').show();" />
+					<p:commandButton title="Editar Produtos" icon="ui-icon-person" 
+						 actionListener="#{ServicoBean.editarProdutoServico(servico)}" action="consultarServicoProduto" />
+					<p:commandButton title="Remover"
+						actionListener="#{ServicoBean.remover(servico)}" icon="ui-icon-trash"  process="@this" update=":formularioConsultaServico, :mensagem" >
+						<p:confirm header="Exclusão de serviço" message="Tem certeza que deseja excluir o serviço?" icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" process="@this" />
+				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+			</p:confirmDialog>
+		</h:form>
+		
+		</ui:define>
+			
+		<ui:define name="dialogos"> <p:dialog header="Editar" widgetVar="consultaServico" modal="true">
+			
+			<h:form prependId="false" id="formularioEditaServico">
+			
+			<h:panelGrid id="editar" columns="2">
+				<br />
+				<h2>Dados do Servico</h2>
+				<h:inputHidden id="idServico" value="#{ServicoBean.servico.idServico}" />
+				
+				<p:outputLabel for="valor" value="Valor" />
+				<p:inputText id="valor" required="true" size="25" value="#{ServicoBean.servico.valor}" validator="ValorValidator" validatorMessage="Valor inválido!" />
+					
+				<p:outputLabel for="descricao" value="Descrição" />
+				<p:inputTextarea id="descricao" required="true" rows="4" cols="40" maxlength="255" value="#{ServicoBean.servico.descricao}" />
+			</h:panelGrid>			
+			<p:commandButton value="Atualizar" actionListener="#{ServicoBean.atualizar}" update=":formularioConsultaServico" ajax="false" /> 
+			<p:commandButton value="Limpar">
+                <p:ajax update="editar" resetValues="true" />
+            </p:commandButton>	
+		</h:form>
+			</p:dialog> 
+		</ui:define>
+</ui:composition>

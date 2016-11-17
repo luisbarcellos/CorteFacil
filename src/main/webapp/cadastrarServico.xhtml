@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Servico" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Serviço</h2>
+		<br />
+
+		<h:form id="formularioCadastroServico">
+			<h:panelGrid id="panelGrid" columns="2">
+
+				<p:outputLabel for="valor" value="Valor" />
+				<p:inputText id="valor" value="#{ServicoBean.servico.valor}" size="10" required="true"
+					validator="ValorValidator" validatorMessage="Valor inválido!"/>
+
+				<p:outputLabel for="descricao" value="Descrição" />
+				<p:inputTextarea id="descricao" value="#{ServicoBean.servico.descricao}"
+					rows="7" cols="50" required="true" />
+			</h:panelGrid>
+			<br/>
+			<p:dataTable id="listaProduto" emptyMessage="Não possui dados cadastrados!"
+				value="#{ServicoBean.listaProduto}" var="produto" rows="30" style="width:700px;"
+				paginator="true">
+				<f:facet name="header">
+                      Associar produtos
+                </f:facet>                      
+				<p:column headerText="Id"
+					sortBy="#{produto.idProduto}" filterBy="#{produto.idProduto}" filterValue="#{produto.idProduto}" width="20">
+                        #{produto.idProduto}
+                </p:column>
+				<p:column headerText="Nome"
+					sortBy="#{produto.nome}" filterBy="#{produto.nome}" filterValue="#{produto.nome}" width="10px">
+                       #{produto.nome}
+                </p:column>
+				<p:column headerText="Valor"
+					sortBy="#{produto.valor}" filterBy="#{produto.valor}" filterValue="#{produto.valor}" width="10px">
+                       #{produto.valor}
+                </p:column>
+                <p:column width="20">
+					<p:commandButton title="Adicionar" icon="ui-icon-plus" ajax="false" 
+					actionListener="#{ServicoBean.adicionarProdutoAoCadastrar(produto)}" update="listaProduto"/>
+				</p:column>
+			</p:dataTable>
+			<br/>
+			<div align="center">
+				<p:commandButton value="Salvar"
+					actionListener="#{ServicoBean.salvar}" ajax="false" update="formularioCadastroServico"/>
+				<p:commandButton value="Limpar">
+					<p:ajax update="panelGrid" resetValues="true" />
+				</p:commandButton>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

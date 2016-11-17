@@ -6,62 +6,57 @@ import javax.ejb.Stateless;
 
 import org.hibernate.Session;
 
-import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
-
-import br.com.cortefacil.modelo.Fornecedor;
-import br.com.cortefacil.modelo.Produto;
+import br.com.cortefacil.modelo.Servico;
 
 @Stateless
-public class ProdutoDAOImpl implements ProdutoDAO{
+public class ServicoDAOImpl implements ServicoDAO{
 	private Session sessao;
 
-	public ProdutoDAOImpl() {
+	public ServicoDAOImpl() {
 		sessao = HibernateUtil.getSessionFactory().getCurrentSession();
 	}
 
-	public void salvar(Produto produto) {
+	public void salvar(Servico servico) {
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
-		sessao.saveOrUpdate(produto);
+		
+		sessao.saveOrUpdate(servico);
 		sessao.flush();
 		sessao.getTransaction().commit();
 	}
 	
-	public void remover(Produto produto) throws Exception{
+	public void remover(Servico servico) throws Exception{
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
-		produto.getListaFornecedor().removeAll(produto.getListaFornecedor());
-		sessao.delete(produto);
+		servico.getListaProdutos().removeAll(servico.getListaProdutos());
+		sessao.delete(servico);
 		sessao.flush();
 		sessao.getTransaction().commit();
 	}
 	
-	public List<Produto> listarTodos() {
+	public List<Servico> listarTodos() {
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
-		List<Produto> lista = sessao.createCriteria(Produto.class).list();
+		List<Servico> lista = sessao.createCriteria(Servico.class).list();
 
 		sessao.getTransaction().commit();
 		//sessao.close();
 		return lista;
 	}
-
-	public void atualizar(Produto produto) {
+	public void atualizar(Servico servico) {
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
-		}else{
-			
 		}
 		sessao.beginTransaction();
 		sessao.flush();
 		sessao.clear();
-		sessao.update(produto);
+		sessao.update(servico);
 		sessao.flush();
 		sessao.getTransaction().commit();
 	}

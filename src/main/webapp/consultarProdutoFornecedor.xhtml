@@ -13,46 +13,39 @@
 	</ui:define>
 	<ui:define name="conteudo">
 		<h2>Consulta</h2>
-		<h:form id="formularioConsultaProduto">
-			<p:dataTable id="tabelaProduto"
-				emptyMessage="Não possui dados cadastrados!"
-				value="#{ProdutoBean.listaProduto}" var="produto" rows="30"
-				paginator="true">
-				<p:column headerText="Id" sortBy="#{produto.idProduto}"
-					filterBy="#{produto.idProduto}" width="20">
-                        #{produto.idProduto}
+		<h:form id="formularioConsultaFornecedor">
+			<p:fieldset legend="Fornecedores do Produto">
+				<p:dataTable emptyMessage="Não possui dados cadastrados!"
+					value="#{ProdutoBean.produto.listaFornecedor}" var="fornecedor"
+					rows="30" paginator="true">
+					<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
+						filterBy="#{fornecedor.idFornecedor}" width="20">
+                        #{fornecedor.idFornecedor}
                 </p:column>
-				<p:column headerText="Nome" sortBy="#{produto.nome}"
-					filterBy="#{produto.nome}" width="100">
-                       #{produto.nome}
+					<p:column headerText="Nome" sortBy="#{fornecedor.nome}"
+						filterBy="#{fornecedor.nome}" width="100">
+                       #{fornecedor.nome}
                 </p:column>
-				<p:column headerText="Quantidade" sortBy="#{produto.quantidade}"
-					filterBy="#{produto.quantidade}" width="80">
-                        #{produto.quantidade}
+					<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}"
+						filterBy="#{fornecedor.telefone}" width="80">
+                        #{fornecedor.telefone}
                 </p:column>
-				<p:column headerText="Valor" sortBy="#{produto.valor}"
-					filterBy="#{produto.valor}" width="80">
-                        #{produto.valor}
+					<p:column headerText="Email" sortBy="#{fornecedor.email}"
+						filterBy="#{fornecedor.email}" width="250">
+                        #{fornecedor.email}
                 </p:column>
-				<p:column headerText="Descrição" width="250">
-					#{produto.descricao}
-                </p:column>
-				<p:column width="65">
-					<p:commandButton title="Editar" icon="ui-icon-search"
-						update=":formularioEditaFornecedor"
-						actionListener="#{ProdutoBean.editarFornecedorProduto(produto)}"
-						onclick="PF('editaFornecedor').show();" />
-
-					<p:commandButton title="Remover"
-						actionListener="#{ProdutoBean.remover(produto)}"
-						icon="ui-icon-trash" process="@this"
-						update=":formularioConsultaProduto, :mensagem">
-						<p:confirm header="Exclusão de produto"
-							message="Tem certeza que deseja excluir o produto?"
-							icon="ui-icon-alert" />
-					</p:commandButton>
-				</p:column>
-			</p:dataTable>
+					<p:column width="20">
+						<p:commandButton title="Remover"
+							actionListener="#{ProdutoBean.removerFornecedorDoProduto(fornecedor)}"
+							icon="ui-icon-minus" process="@this"
+							update=":formularioConsultaFornecedor, :mensagem">
+							<p:confirm header="Remover fornecedor"
+								message="Tem certeza que deseja remover o fornecedordo produto?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
 			<p:confirmDialog global="true">
 				<p:commandButton value="Sim" type="button"
 					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
@@ -60,73 +53,36 @@
 				<p:commandButton value="Não" type="button"
 					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 			</p:confirmDialog>
+			<br/>
+			<p:fieldset legend="Fornecedores Cadastrados">
+				<p:dataTable emptyMessage="Não possui dados cadastrados!"
+					value="#{ProdutoBean.listaFornecedor}" var="fornecedor"
+					rows="30" paginator="true">
+					<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
+						filterBy="#{fornecedor.idFornecedor}" width="20">
+                        #{fornecedor.idFornecedor}
+                </p:column>
+					<p:column headerText="Nome" sortBy="#{fornecedor.nome}"
+						filterBy="#{fornecedor.nome}" width="100">
+                       #{fornecedor.nome}
+                </p:column>
+					<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}"
+						filterBy="#{fornecedor.telefone}" width="80">
+                        #{fornecedor.telefone}
+                </p:column>
+					<p:column headerText="Email" sortBy="#{fornecedor.email}"
+						filterBy="#{fornecedor.email}" width="250">
+                        #{fornecedor.email}
+                </p:column>
+					<p:column width="20">
+						<p:commandButton title="Adicionar"
+							actionListener="#{ProdutoBean.adicionarFornecedorAoProduto(fornecedor)}"
+							icon="ui-icon-plus" process="@this"
+							update=":formularioConsultaFornecedor, :mensagem"/>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
 		</h:form>
 
-	</ui:define>
-
-	<ui:define name="dialogos">
-		<p:dialog header="Editar Fornecedor" widgetVar="editaFornecedor" height="550"
-			modal="true">
-
-			<h:form prependId="false" id="formularioEditaFornecedor">
-				<p:fieldset legend="Fornecedores do Produto">
-					<p:dataTable id="tabelaFornecedorDoProduto"
-						emptyMessage="Não possui dados cadastrados!"
-						value="#{ProdutoBean.produto.listaFornecedor}" var="fornecedor" rows="5"
-						paginator="true">
-						<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
-							filterBy="#{fornecedor.idFornecedor}" width="20">
-                        #{fornecedor.idFornecedor}
-                </p:column>
-						<p:column headerText="Nome" sortBy="#{fornecedor.nome}"
-							filterBy="#{fornecedor.nome}" width="100">
-                       #{fornecedor.nome}
-                </p:column>
-						<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}"
-							filterBy="#{fornecedor.telefone}" width="80">
-                        #{fornecedor.telefone}
-                </p:column>
-						<p:column headerText="Email" sortBy="#{fornecedor.email}"
-							filterBy="#{fornecedor.email}" width="250">
-                        #{fornecedor.email}
-                </p:column>
-						<p:column width="50">
-							<p:commandButton title="Remover Fornecedor" icon="ui-icon-minus"
-								update=":formularioConsultaProduto"
-								actionListener="#{ProdutoBean.adicionarFornecedorAoAtualizar(fornecedor)}" />
-						</p:column>
-					</p:dataTable>
-				</p:fieldset>
-				<br />
-				<p:fieldset legend="Fornecedores Cadastrados">
-					<p:dataTable id="tabelaFornecedoresDisponiveis"
-						emptyMessage="Não possui dados cadastrados!"
-						value="#{ProdutoBean.listaFornecedor}" var="fornecedor" rows="5"
-						paginator="true">
-						<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
-							filterBy="#{fornecedor.idFornecedor}" width="20">
-                        #{fornecedor.idFornecedor}
-                </p:column>
-						<p:column headerText="Nome" sortBy="#{fornecedor.nome}"
-							filterBy="#{fornecedor.nome}" width="100">
-                       #{fornecedor.nome}
-                </p:column>
-						<p:column headerText="Telefone" sortBy="#{fornecedor.telefone}"
-							filterBy="#{fornecedor.telefone}" width="80">
-                        #{fornecedor.telefone}
-                </p:column>
-						<p:column headerText="Email" sortBy="#{fornecedor.email}"
-							filterBy="#{fornecedor.email}" width="250">
-                        #{fornecedor.email}
-                </p:column>
-						<p:column width="50">
-							<p:commandButton title="Adicionar Fornecedor" icon="ui-icon-plus"
-								update=":formularioConsultaProduto"
-								actionListener="#{ProdutoBean.adicionarFornecedorAoAtualizar(fornecedor)}" />
-						</p:column>
-					</p:dataTable>
-				</p:fieldset>
-			</h:form>
-		</p:dialog>
 	</ui:define>
 </ui:composition>

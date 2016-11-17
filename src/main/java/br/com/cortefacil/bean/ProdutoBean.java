@@ -7,20 +7,16 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import br.com.cortefacil.ejb.FornecedorEJB;
 import br.com.cortefacil.ejb.ProdutoEJB;
-import br.com.cortefacil.ejb.ProdutoEJB;
-import br.com.cortefacil.modelo.Produto;
-import br.com.cortefacil.modelo.Endereco;
 import br.com.cortefacil.modelo.Fornecedor;
 import br.com.cortefacil.modelo.Produto;
 
 @ManagedBean(name = "ProdutoBean")
-@ViewScoped
+@SessionScoped
 public class ProdutoBean extends BaseBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,9 +33,10 @@ public class ProdutoBean extends BaseBean implements Serializable {
 	private Produto produto = new Produto();
 	
 	@PostConstruct
-	public void initIt(){
+	public void init(){
 		listaFornecedor = auxFornecedorEJB.listarTodos();
 	}
+	
 	public Produto getProduto() {
 		return produto;
 	}
@@ -54,9 +51,14 @@ public class ProdutoBean extends BaseBean implements Serializable {
 	
 	public void editarFornecedorProduto(Produto produto){
 		this.produto = produto;
-		ArrayList<Fornecedor> auxListaFornecedor = new ArrayList();
-		auxListaFornecedor = (ArrayList<Fornecedor>) produto.getListaFornecedor();
-		listaFornecedor.removeAll(produto.getListaFornecedor());
+		setListaFornecedor(auxFornecedorEJB.listarTodos());
+		for(Fornecedor fornecedor : produto.getListaFornecedor()){
+			for(int i=0; i <= getListaFornecedor().size() ; i++){
+				if(getListaFornecedor().get(i).getIdFornecedor() == fornecedor.getIdFornecedor()){
+					getListaFornecedor().remove(i);
+				}
+			}
+		}
 	}
 	public void salvar() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -64,7 +66,7 @@ public class ProdutoBean extends BaseBean implements Serializable {
 		try {
 			auxProdutoEJB.salvar(produto);
 			produto = new Produto(); // Limpando o formulário.
-			listaFornecedor = auxFornecedorEJB.listarTodos(); //Carregando a lista de fornecedores
+			setListaFornecedor(auxFornecedorEJB.listarTodos()); //Carregando a lista de fornecedores
 			
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Produto salvo com sucesso!",
 					String.class);
@@ -96,7 +98,7 @@ public class ProdutoBean extends BaseBean implements Serializable {
 		String mensagem;
 		try {
 			produto.getListaFornecedor().add(fornecedor);
-			listaFornecedor.remove(fornecedor);
+			getListaFornecedor().remove(fornecedor);
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Fornecedor adicionado com sucesso!",
 					String.class);
 			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
@@ -106,12 +108,12 @@ public class ProdutoBean extends BaseBean implements Serializable {
 		}
 	}
 	
-	public void adicionarFornecedorAoAtualizar(Fornecedor fornecedor){
+	public void adicionarFornecedorAoProduto(Fornecedor fornecedor){
 		FacesContext context = FacesContext.getCurrentInstance();
 		String mensagem;
 		try {
 			produto.getListaFornecedor().add(fornecedor);
-			listaFornecedor.remove(fornecedor);
+			getListaFornecedor().remove(fornecedor);
 			auxProdutoEJB.atualizar(produto);
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Fornecedor adicionado com sucesso!",
 					String.class);
@@ -133,7 +135,21 @@ public class ProdutoBean extends BaseBean implements Serializable {
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao excluir o produto!", String.class);
 			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
 		}
-		
+	}
+	
+	public void removerFornecedorDoProduto(Fornecedor fornecedor){
+		FacesContext context = FacesContext.getCurrentInstance();
+		String mensagem;
+		try {
+			this.produto.getListaFornecedor().remove(fornecedor);
+			getListaFornecedor().add(fornecedor);
+			auxProdutoEJB.atualizar(produto);
+			mensagem = context.getApplication().evaluateExpressionGet(context, "Produto removido com sucesso!", String.class);
+			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
+		} catch (Exception e) {
+			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao remover o produto!", String.class);
+			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
+		}
 	}
 
 	public List<Produto> getListaProduto() {
@@ -143,8 +159,11 @@ public class ProdutoBean extends BaseBean implements Serializable {
 	public void setListaProduto(List<Produto> listaProduto) {
 		this.listaProduto = listaProduto;
 	}
-
+	
 	public List<Fornecedor> getListaFornecedor() {
-		return listaFornecedor;
+		return this.listaFornecedor;
 	}
+	public void setListaFornecedor(List<Fornecedor> listaFornecedor) {
+		this.listaFornecedor = listaFornecedor;
+	}	
 }
