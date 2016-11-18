@@ -19,7 +19,7 @@ import br.com.cortefacil.modelo.Cliente;
 
 @Stateless
 public class ClienteDAOImpl implements ClienteDAO {
-	private Session sessao;
+private Session sessao;
 	//@PersistenceContext(unitName = "PostgreSQL")
 	//private EntityManager em;
 	    
@@ -27,7 +27,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 		sessao = HibernateUtil.getSessionFactory().getCurrentSession();
 	}
 	
-	//@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void salvar(Cliente cliente) {
 		//em.merge(cliente);
 		
@@ -41,6 +41,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 		sessao.getTransaction().commit();
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void atualizar(Cliente cliente) {
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
@@ -54,6 +55,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 		sessao.getTransaction().commit();
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void remover(Cliente cliente) throws Exception{
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
@@ -64,6 +66,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 		sessao.getTransaction().commit();
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public List<Cliente> listarTodos() {
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();

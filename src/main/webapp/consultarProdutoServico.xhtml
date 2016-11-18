@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Consulta" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Consulta</h2>
+		<h:form id="formularioConsultaProduto">
+			<p:fieldset legend="Produtos do Serviço">
+				<p:dataTable emptyMessage="Não possui dados cadastrados!"
+					value="#{ServicoProdutoBean.servico.listaProdutos}" var="produto"
+					rows="30" paginator="true">
+					<p:column headerText="Id" sortBy="#{produto.idProduto}"
+							filterBy="#{produto.idProduto}" width="20">
+	                        #{produto.idProduto}
+	                </p:column>
+						<p:column headerText="Nome" sortBy="#{produto.nome}"
+							filterBy="#{produto.nome}" width="100">
+	                       #{produto.nome}
+	                </p:column>
+						<p:column headerText="Quantidade" sortBy="#{produto.quantidade}"
+							filterBy="#{produto.quantidade}" width="80">
+	                        #{produto.quantidade}
+	                </p:column>
+						<p:column headerText="Valor" sortBy="#{produto.valor}"
+							filterBy="#{produto.valor}" width="80">
+	                        #{produto.valor}
+	                </p:column>
+						<p:column headerText="Descrição" width="250">
+						#{produto.descricao}
+	                </p:column>
+					<p:column width="20">
+						<p:commandButton title="Remover"
+							actionListener="#{ServicoProdutoBean.removerProdutoDoServico(produto)}"
+							icon="ui-icon-minus" process="@this"
+							update=":formularioConsultaProduto, :mensagem">
+							<p:confirm header="Remover produto"
+								message="Tem certeza que deseja remover o produto do serviço?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					process="@this" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+			<br />
+			<p:fieldset legend="Produtos Cadastrados">
+				<p:dataTable emptyMessage="Não possui dados cadastrados!"
+					value="#{ServicoProdutoBean.listaProduto}" var="produto" rows="30"
+					paginator="true">
+					<p:column headerText="Id" sortBy="#{produto.idProduto}"
+							filterBy="#{produto.idProduto}" width="20">
+	                        #{produto.idProduto}
+	                </p:column>
+						<p:column headerText="Nome" sortBy="#{produto.nome}"
+							filterBy="#{produto.nome}" width="100">
+	                       #{produto.nome}
+	                </p:column>
+						<p:column headerText="Quantidade" sortBy="#{produto.quantidade}"
+							filterBy="#{produto.quantidade}" width="80">
+	                        #{produto.quantidade}
+	                </p:column>
+						<p:column headerText="Valor" sortBy="#{produto.valor}"
+							filterBy="#{produto.valor}" width="80">
+	                        #{produto.valor}
+	                </p:column>
+						<p:column headerText="Descrição" width="250">
+						#{produto.descricao}
+	                </p:column>
+					<p:column width="20">
+						<p:commandButton title="Adicionar"
+							actionListener="#{ServicoProdutoBean.adicionarProdutoAoServico(produto)}"
+							icon="ui-icon-plus" process="@this"
+							update=":formularioConsultaProduto, :mensagem" />
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -19,9 +19,9 @@ import br.com.cortefacil.modelo.Fornecedor;
 import br.com.cortefacil.modelo.Produto;
 import br.com.cortefacil.modelo.Servico;
 
-@ManagedBean(name = "ServicoBean")
-@ViewScoped
-public class ServicoBean extends BaseBean implements Serializable {
+@ManagedBean(name = "ServicoProdutoBean")
+@SessionScoped
+public class ServicoProdutoBean extends BaseBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
@@ -41,68 +41,15 @@ public class ServicoBean extends BaseBean implements Serializable {
 		listaProduto = auxProdutoEJB.listarTodos();
 	}
 	
-	public void editar(Servico servico) {
-		this.setServico(servico);
-	}
-	
 	public void editarProdutoServico(Servico servico){
 		this.servico = servico;
 		setListaProduto(auxProdutoEJB.listarTodos());
 		for(Produto produto: servico.getListaProdutos()){
-			for(int i=0; i <= getListaProduto().size() ; i++){
+			for(int i=0; i < getListaProduto().size() ; i++){
 				if(getListaProduto().get(i).getIdProduto() == produto.getIdProduto()){
 					getListaProduto().remove(i);
 				}
 			}
-		}
-	}
-	public void salvar() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		String mensagem;
-		try {
-			auxServicoEJB.salvar(getServico());
-			setServico(new Servico()); // Limpando o formulário.
-			setListaProduto(auxProdutoEJB.listarTodos()); //Carregando a lista de produtos
-			
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Serviço salvo com sucesso!",
-					String.class);
-			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
-		} catch (Exception e) {
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao salvar a serviço!", String.class);
-			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
-		}
-	}
-	
-	public void atualizar() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		String mensagem;
-		try {
-			auxServicoEJB.atualizar(getServico());
-			setServico(new Servico()); // Limpando o formulário.
-
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Serviço atualizado com sucesso!",
-					String.class);
-			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
-		} catch (Exception e) {
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao atualizar serviço!", String.class);
-			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
-		}
-	}
-	
-	public void adicionarProdutoAoCadastrar(Produto produto){
-		FacesContext context = FacesContext.getCurrentInstance();
-		String mensagem;
-		try {
-			getServico().getListaProdutos().add(produto);
-			servico.adicionaValor(produto.getValor());
-			listaProduto.remove(produto);
-			//getListaProduto().remove(produto);
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Produto adicionado com sucesso!",
-					String.class);
-			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
-		} catch (Exception e) {
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao adicionar produto!", String.class);
-			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
 		}
 	}
 	
@@ -118,19 +65,6 @@ public class ServicoBean extends BaseBean implements Serializable {
 			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
 		} catch (Exception e) {
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao adicionar produto!", String.class);
-			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
-		}
-	}
-
-	public void remover(Servico servico) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		String mensagem;
-		try {
-			auxServicoEJB.remover(servico);
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Serviço excluído com sucesso!", String.class);
-			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
-		} catch (Exception e) {
-			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao excluir o serviço!", String.class);
 			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
 		}
 	}

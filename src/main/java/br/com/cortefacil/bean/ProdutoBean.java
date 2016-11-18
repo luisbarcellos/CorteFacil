@@ -8,15 +8,18 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import br.com.cortefacil.ejb.FornecedorEJB;
 import br.com.cortefacil.ejb.ProdutoEJB;
+import br.com.cortefacil.ejb.ServicoEJB;
 import br.com.cortefacil.modelo.Fornecedor;
 import br.com.cortefacil.modelo.Produto;
+import br.com.cortefacil.modelo.Servico;
 
 @ManagedBean(name = "ProdutoBean")
-@SessionScoped
+@ViewScoped
 public class ProdutoBean extends BaseBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,9 +29,14 @@ public class ProdutoBean extends BaseBean implements Serializable {
 	@EJB
 	public FornecedorEJB auxFornecedorEJB;
 	
+	@EJB
+	public ServicoEJB auxServicoEJB;
+	
 	private List<Produto> listaProduto;
 	
 	private List<Fornecedor> listaFornecedor;
+	
+	private List<Servico> listaServico;
 	
 	private Produto produto = new Produto();
 	
@@ -128,6 +136,17 @@ public class ProdutoBean extends BaseBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 		String mensagem;
 		try {
+			setListaServico(getListaServico());
+			for(Servico servico: getListaServico()){
+				for(int i=0; i < servico.getListaProdutos().size() ; i++){
+					if(!servico.getListaProdutos().isEmpty()){
+						if(servico.getListaProdutos().get(i).getIdProduto() == produto.getIdProduto()){
+							servico.getListaProdutos().remove(i);
+							auxServicoEJB.atualizar(servico);
+						}
+					}
+				}
+			}
 			auxProdutoEJB.remover(produto);
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Produto excluído com sucesso!", String.class);
 			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
@@ -165,5 +184,13 @@ public class ProdutoBean extends BaseBean implements Serializable {
 	}
 	public void setListaFornecedor(List<Fornecedor> listaFornecedor) {
 		this.listaFornecedor = listaFornecedor;
+	}
+
+	public List<Servico> getListaServico() {
+		return this.listaServico = auxServicoEJB.listarTodos();
+	}
+
+	public void setListaServico(List<Servico> listaServico) {
+		this.listaServico = listaServico;
 	}	
 }

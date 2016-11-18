@@ -10,9 +10,12 @@ import javax.faces.context.FacesContext;
 
 import br.com.cortefacil.ejb.ClienteEJB;
 import br.com.cortefacil.ejb.FornecedorEJB;
+import br.com.cortefacil.ejb.ProdutoEJB;
 import br.com.cortefacil.modelo.Cliente;
 import br.com.cortefacil.modelo.Endereco;
 import br.com.cortefacil.modelo.Fornecedor;
+import br.com.cortefacil.modelo.Produto;
+import br.com.cortefacil.modelo.Servico;
 
 @ManagedBean(name = "FornecedorBean")
 @RequestScoped
@@ -21,8 +24,13 @@ public class FornecedorBean extends BaseBean implements Serializable {
 
 	@EJB
 	public FornecedorEJB auxFornecedorEJB;
-
+	
+	@EJB
+	public ProdutoEJB auxProdutoEJB;
+	
 	private List<Fornecedor> listaFornecedor;
+	
+	private List<Produto> listaProduto;
 	
 	private Fornecedor fornecedor = new Fornecedor();
 	
@@ -76,6 +84,17 @@ public class FornecedorBean extends BaseBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 		String mensagem;
 		try {
+			setListaProduto(getListaProduto());
+			for(Produto produto: getListaProduto()){
+				for(int i=0; i < produto.getListaFornecedor().size() ; i++){
+					if(!produto.getListaFornecedor().isEmpty()){
+						if(produto.getListaFornecedor().get(i).getIdFornecedor() == fornecedor.getIdFornecedor()){
+							produto.getListaFornecedor().remove(i);
+							auxProdutoEJB.atualizar(produto);
+						}
+					}
+				}
+			}
 			auxFornecedorEJB.remover(fornecedor);
 			mensagem = context.getApplication().evaluateExpressionGet(context, "Fornecedor excluído com sucesso!", String.class);
 			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
@@ -91,5 +110,13 @@ public class FornecedorBean extends BaseBean implements Serializable {
 
 	public void setListaFornecedor(List<Fornecedor> listaFornecedor) {
 		this.listaFornecedor = listaFornecedor;
+	}
+
+	public List<Produto> getListaProduto() {
+		return this.listaProduto = auxProdutoEJB.listarTodos();
+	}
+
+	public void setListaProduto(List<Produto> listaProduto) {
+		this.listaProduto = listaProduto;
 	}
 }

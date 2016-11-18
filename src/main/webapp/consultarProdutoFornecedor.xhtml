@@ -16,7 +16,7 @@
 		<h:form id="formularioConsultaFornecedor">
 			<p:fieldset legend="Fornecedores do Produto">
 				<p:dataTable emptyMessage="Não possui dados cadastrados!"
-					value="#{ProdutoBean.produto.listaFornecedor}" var="fornecedor"
+					value="#{ProdutoFornecedorBean.produto.listaFornecedor}" var="fornecedor"
 					rows="30" paginator="true">
 					<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
 						filterBy="#{fornecedor.idFornecedor}" width="20">
@@ -36,11 +36,11 @@
                 </p:column>
 					<p:column width="20">
 						<p:commandButton title="Remover"
-							actionListener="#{ProdutoBean.removerFornecedorDoProduto(fornecedor)}"
+							actionListener="#{ProdutoFornecedorBean.removerFornecedorDoProduto(fornecedor)}"
 							icon="ui-icon-minus" process="@this"
 							update=":formularioConsultaFornecedor, :mensagem">
 							<p:confirm header="Remover fornecedor"
-								message="Tem certeza que deseja remover o fornecedordo produto?"
+								message="Tem certeza que deseja remover o fornecedor do produto?"
 								icon="ui-icon-alert" />
 						</p:commandButton>
 					</p:column>
@@ -56,7 +56,7 @@
 			<br/>
 			<p:fieldset legend="Fornecedores Cadastrados">
 				<p:dataTable emptyMessage="Não possui dados cadastrados!"
-					value="#{ProdutoBean.listaFornecedor}" var="fornecedor"
+					value="#{ProdutoFornecedorBean.listaFornecedor}" var="fornecedor"
 					rows="30" paginator="true">
 					<p:column headerText="Id" sortBy="#{fornecedor.idFornecedor}"
 						filterBy="#{fornecedor.idFornecedor}" width="20">
@@ -76,7 +76,7 @@
                 </p:column>
 					<p:column width="20">
 						<p:commandButton title="Adicionar"
-							actionListener="#{ProdutoBean.adicionarFornecedorAoProduto(fornecedor)}"
+							actionListener="#{ProdutoFornecedorBean.adicionarFornecedorAoProduto(fornecedor)}"
 							icon="ui-icon-plus" process="@this"
 							update=":formularioConsultaFornecedor, :mensagem"/>
 					</p:column>

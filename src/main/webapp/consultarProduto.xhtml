@@ -41,7 +41,7 @@
 					<p:commandButton title="Editar Produto" icon="ui-icon-pencil"  update=":formularioEditaProduto"
 						 actionListener="#{ProdutoBean.editar(produto)}" onclick="PF('consultaProduto').show();" />
 					<p:commandButton title="Editar Fornecedores" icon="ui-icon-person" 
-						 actionListener="#{ProdutoBean.editarFornecedorProduto(produto)}" action="consultarProdutoFornecedor" />
+						 actionListener="#{ProdutoFornecedorBean.editarFornecedorProduto(produto)}" action="consultarProdutoFornecedor" />
 					<p:commandButton title="Remover"
 						actionListener="#{ProdutoBean.remover(produto)}" icon="ui-icon-trash"  process="@this" update=":formularioConsultaProduto, :mensagem" >
 						<p:confirm header="Exclusão de produto" message="Tem certeza que deseja excluir o produto?" icon="ui-icon-alert" />

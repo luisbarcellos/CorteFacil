@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+
 @Entity
 @Table(name="servico")
 public class Servico {
@@ -20,7 +22,7 @@ public class Servico {
     @GeneratedValue
 	private Integer idServico;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	 @JoinTable(name="servico_produto",joinColumns={@JoinColumn(name="idservico")}, 
     inverseJoinColumns={@JoinColumn(name="idproduto")})
 	private List<Produto> listaProdutos = new ArrayList<Produto>();
