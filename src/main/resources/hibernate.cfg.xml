@@ -17,5 +17,6 @@
     <mapping class="br.com.cortefacil.modelo.Produto"/>
     <mapping class="br.com.cortefacil.modelo.Endereco"/>
     <mapping class="br.com.cortefacil.modelo.Servico"/>
+    <mapping class="br.com.cortefacil.modelo.OrdemServico"/>
   </session-factory>
 </hibernate-configuration>

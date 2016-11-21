@@ -50,7 +50,7 @@ public class ProdutoFornecedorBean extends BaseBean implements Serializable {
 		this.produto = produto;
 		setListaFornecedor(auxFornecedorEJB.listarTodos());
 		for(Fornecedor fornecedor : produto.getListaFornecedor()){
-			for(int i=0; i <= getListaFornecedor().size() ; i++){
+			for(int i=0; i < getListaFornecedor().size() ; i++){
 				if(getListaFornecedor().get(i).getIdFornecedor() == fornecedor.getIdFornecedor()){
 					getListaFornecedor().remove(i);
 				}

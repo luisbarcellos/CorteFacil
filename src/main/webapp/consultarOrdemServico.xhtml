@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Consulta" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Consulta</h2>
+		<h:form id="formularioConsultaOrdemServico">
+			<p:dataTable id="tabelaOrdemServico"
+				emptyMessage="Não possui dados cadastrados!"
+				value="#{OrdemServicoBean.listaOrdemServico}" var="ordemServico"
+				rows="30" paginator="true">
+				<p:column headerText="Id" sortBy="#{ordemServico.idOrdemServico}"
+					filterBy="#{ordemServico.idOrdemServico}" width="20">
+                        #{ordemServico.idOrdemServico}
+                </p:column>
+				<p:column headerText="Data" sortBy="#{ordemServico.data}"
+					filterBy="#{ordemServico.data}" width="100">
+                       #{ordemServico.data}
+                </p:column>
+				<p:column headerText="Valor" sortBy="#{ordemServico.valor}"
+					filterBy="#{ordemServico.valor}" width="80">
+                        #{ordemServico.valor}
+                </p:column>
+				<p:column headerText="Descrição" width="250">
+					#{ordemServico.descricao}
+                </p:column>
+				<p:column width="110">
+					<p:commandButton title="Consultar serviços da ordem"
+						icon="ui-icon-search" update=":formularioConsultaServico"
+						actionListener="#{OrdemServicoBean.consultaServicos(ordemServico)}"
+						onclick="PF('consultaServico').show();" />
+					<p:commandButton title="Remover"
+						actionListener="#{OrdemServicoBean.remover(ordemServico)}"
+						icon="ui-icon-trash" process="@this"
+						update=":formularioConsultaOrdemServico, :mensagem">
+						<p:confirm header="Exclusão de Ordem de Serviço"
+							message="Tem certeza que deseja excluir a Ordem de Serviço?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+					process="@this" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="dialogos">
+		<p:dialog header="Consulta" widgetVar="consultaServico" modal="true">
+
+			<h:form prependId="false" id="formularioConsultaServico">
+
+				<h:panelGrid id="consulta">
+					<br />
+					<h:panelGrid columns="2">
+						<p:fieldset legend="Cliente" style="width:550px;">
+							<p:outputLabel value="Id: " />
+							<p:outputLabel value="#{OrdemServicoBean.ordemServico.cliente.idCliente}" />
+							<br/>
+							<br/>
+							<p:outputLabel value="Nome: " />
+							<p:outputLabel value="#{OrdemServicoBean.ordemServico.cliente.nome}" />
+							<br/>
+							<br/>
+							<p:outputLabel value="Telefone: " />
+							<p:outputLabel value="#{OrdemServicoBean.ordemServico.cliente.telefone}" converter="TelefoneConverter" />
+							<br/>
+							<br/>
+							<p:outputLabel value="Email: " />
+							<p:outputLabel value="#{OrdemServicoBean.ordemServico.cliente.email}" />
+						</p:fieldset>
+					</h:panelGrid>
+					<br />
+					<p:fieldset legend="Serviços cadastrados">
+						<p:dataTable emptyMessage="Não possui dados cadastrados!"
+							value="#{OrdemServicoBean.ordemServico.listaServico}" var="servico" rows="30"
+							paginator="true">
+							<p:column headerText="Id" sortBy="#{servico.idServico}"
+								filterBy="#{servico.idServico}" width="20">
+	                        #{servico.idServico}
+	                </p:column>
+							<p:column headerText="Valor" sortBy="#{servico.valor}"
+								filterBy="#{servico.valor}" width="100">
+	                       #{servico.valor}
+	                </p:column>
+							<p:column headerText="Descrição" width="250">
+						#{servico.descricao}
+	                </p:column>
+						</p:dataTable>
+					</p:fieldset>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

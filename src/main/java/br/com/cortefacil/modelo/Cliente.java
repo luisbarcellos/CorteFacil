@@ -1,6 +1,8 @@
 package br.com.cortefacil.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,9 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -40,7 +44,10 @@ public class Cliente implements Serializable{
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idendereco")
 	private Endereco endereco = new Endereco();
-		
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+	private List<OrdemServico> listaOrdemServico = new ArrayList<OrdemServico>();
+	
 	public Integer getIdCliente() {
 		return idCliente;
 	}
@@ -83,4 +90,11 @@ public class Cliente implements Serializable{
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
+	public List<OrdemServico> getListaOrdemServico() {
+		return listaOrdemServico;
+	}
+	public void setListaOrdemServico(List<OrdemServico> listaOrdemServico) {
+		this.listaOrdemServico = listaOrdemServico;
+	}
+
 }

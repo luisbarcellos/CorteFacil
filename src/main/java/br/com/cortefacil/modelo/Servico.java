@@ -27,6 +27,9 @@ public class Servico {
     inverseJoinColumns={@JoinColumn(name="idproduto")})
 	private List<Produto> listaProdutos = new ArrayList<Produto>();
 	
+	@ManyToMany(mappedBy = "listaServico")
+	private List<OrdemServico> listaOrdemServico;
+	
 	@Column(name = "descricao")
 	private String descricao;
 	
@@ -61,5 +64,11 @@ public class Servico {
 	
 	public void adicionaValor(double valor){
 		this.valor = this.valor + valor;
+	}
+	public List<OrdemServico> getListaOrdemServico() {
+		return listaOrdemServico;
+	}
+	public void setListaOrdemServico(List<OrdemServico> listaOrdemServico) {
+		this.listaOrdemServico = listaOrdemServico;
 	}
 }

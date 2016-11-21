@@ -9,65 +9,62 @@ import javax.ejb.TransactionAttributeType;
 import org.hibernate.Session;
 
 import br.com.cortefacil.modelo.Cliente;
+import br.com.cortefacil.modelo.OrdemServico;
 
 @Stateless
-public class ClienteDAOImpl implements ClienteDAO {
-private Session sessao;
-	//@PersistenceContext(unitName = "PostgreSQL")
-	//private EntityManager em;
-	    
-	public ClienteDAOImpl() {
+public class OrdemServicoDAOImpl implements OrdemServicoDAO{
+	private Session sessao;
+
+	public OrdemServicoDAOImpl() {
 		sessao = HibernateUtil.getSessionFactory().getCurrentSession();
 	}
 	
-	public void salvar(Cliente cliente) {
-		//em.merge(cliente);
-		
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void salvar(OrdemServico ordemServico) {
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
-		cliente.getEndereco().setCliente(cliente);
-		sessao.save(cliente);
+		sessao.save(ordemServico);
 		sessao.flush();
 		sessao.getTransaction().commit();
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void atualizar(Cliente cliente) {
+	public void remover(OrdemServico ordemServico) throws Exception{
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
-		cliente.getEndereco().setCliente(cliente);
-		sessao.flush();
-		sessao.clear();
-		sessao.update(cliente);
-		sessao.flush();
-		sessao.getTransaction().commit();
-	}
-	
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void remover(Cliente cliente) throws Exception{
-		if (!sessao.isOpen()) {
-			sessao = HibernateUtil.getSessionFactory().openSession();
-		}
-		sessao.beginTransaction();
-		sessao.delete(cliente);
+		ordemServico.getListaServico().removeAll(ordemServico.getListaServico());
+		ordemServico.setCliente(new Cliente());
+		sessao.delete(ordemServico);
 		sessao.flush();
 		sessao.getTransaction().commit();
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public List<Cliente> listarTodos() {
+	public List<OrdemServico> listarTodos() {
 		if (!sessao.isOpen()) {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 		}
 		sessao.beginTransaction();
-		List<Cliente> lista = sessao.createCriteria(Cliente.class).list();
+		List<OrdemServico> lista = sessao.createCriteria(OrdemServico.class).list();
 
 		sessao.getTransaction().commit();
 		//sessao.close();
 		return lista;
+	}
+
+	public void atualizar(OrdemServico ordemServico) {
+		if (!sessao.isOpen()) {
+			sessao = HibernateUtil.getSessionFactory().openSession();
+		}
+		sessao.beginTransaction();
+		sessao.flush();
+		sessao.clear();
+		sessao.update(ordemServico);
+		sessao.flush();
+		sessao.getTransaction().commit();
 	}
 }

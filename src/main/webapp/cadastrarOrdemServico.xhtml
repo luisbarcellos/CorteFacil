@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/layout.xhtml">
+
+
+	<ui:define name="titulo">
+		<h:outputText value="Ordem de Serviço" />
+	</ui:define>
+	<ui:define name="conteudo">
+		<h2>Ordem de Serviço</h2>
+		<br />
+
+		<h:form id="formularioCadastroOrdemServico">
+			<h:panelGrid id="panelGrid" columns="2">
+
+				<p:outputLabel for="data" value="Data" />
+     		   <p:calendar id="data" value="#{OrdemServicoBean.ordemServico.data}" pattern="MM/dd/yyyy HH:mm" 
+     		   		mindate="#{OrdemServicoBean.ordemServico.dataMinima}" required="true"/>
+ 
+				<p:outputLabel for="valor" value="Valor" />
+				<p:inputText id="valor" value="#{OrdemServicoBean.ordemServico.valor}" size="10" required="true"
+					validator="ValorValidator" validatorMessage="Quantidade inválida!"/>
+
+				<p:outputLabel for="descricao" value="Descrição"/>
+				<p:inputText id="descricao" value="#{OrdemServicoBean.ordemServico.descricao}"
+					rows="7" cols="50" required="true" />
+			</h:panelGrid>
+			<br/>
+			<p:dataTable id="listaCliente" emptyMessage="Não possui dados cadastrados!"
+				value="#{OrdemServicoBean.listaCliente}" var="cliente" rows="30" style="width:800px;"
+				paginator="true">
+				<f:facet name="header">
+                      Associar cliente - Apenas 1 poderá ser adicionado!
+                </f:facet>                      
+				<p:column headerText="Id"
+					sortBy="#{cliente.idCliente}" filterBy="#{cliente.idCliente}" width="20">
+                        #{cliente.idCliente}
+                </p:column>
+				<p:column headerText="Nome"
+					sortBy="#{cliente.nome}" filterBy="#{cliente.nome}" width="100">
+                       #{cliente.nome}
+                </p:column>
+				<p:column headerText="Telefone"
+					sortBy="#{cliente.telefone}" filterBy="#{cliente.telefone}" width="80">
+                        #{cliente.telefone}
+                </p:column>
+				<p:column headerText="Email"
+					sortBy="#{cliente.email}"	filterBy="#{cliente.email}">
+                        #{cliente.email}
+                </p:column>
+				
+                <p:column width="20">
+					<p:commandButton title="Adicionar" icon="ui-icon-plus" ajax="false" 
+					actionListener="#{OrdemServicoBean.adicionarClienteAoCadastrar(cliente)}" update="listaCliente"/>
+				</p:column>
+			</p:dataTable>
+			<br/>
+			<f:facet name="header">
+                      Associar serviços
+            </f:facet>   
+			<p:dataTable id="listaServico" 
+				emptyMessage="Não possui dados cadastrados!"
+				value="#{OrdemServicoBean.listaServico}" var="servico" rows="30" style="width:800px;"
+				paginator="true">
+				<p:column headerText="Id"
+					sortBy="#{servico.idServico}" filterBy="#{servico.idServico}" width="20">
+                        #{servico.idServico}
+                </p:column>
+				<p:column headerText="Nome"
+					sortBy="#{servico.valor}" filterBy="#{servico.valor}" width="100">
+                       #{servico.valor}
+                </p:column>
+				<p:column headerText="Descrição" width="250">
+					#{servico.descricao}
+                </p:column>
+                <p:column width="110">	
+					<p:commandButton title="Adicionar Serviço" icon="ui-icon-plus" ajax="false"  update="listaServico"
+						 actionListener="#{OrdemServicoBean.adicionarServicoAoCadastrar(servico)}" />
+				</p:column>
+			</p:dataTable>
+			<br/>
+			<div align="center">
+				<p:commandButton value="Salvar"
+					actionListener="#{OrdemServicoBean.salvar}" ajax="false" update="formularioCadastroOrdemServico"/>
+				<p:commandButton value="Limpar">
+					<p:ajax update="panelGrid" resetValues="true" />
+				</p:commandButton>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

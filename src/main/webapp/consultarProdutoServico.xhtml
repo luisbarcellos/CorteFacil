@@ -40,7 +40,7 @@
 					<p:column width="20">
 						<p:commandButton title="Remover"
 							actionListener="#{ServicoProdutoBean.removerProdutoDoServico(produto)}"
-							icon="ui-icon-minus" process="@this"
+							icon="ui-icon-minus" process="@this" ajax="fasle"
 							update=":formularioConsultaProduto, :mensagem">
 							<p:confirm header="Remover produto"
 								message="Tem certeza que deseja remover o produto do serviço?"
@@ -81,7 +81,7 @@
 						#{produto.descricao}
 	                </p:column>
 					<p:column width="20">
-						<p:commandButton title="Adicionar"
+						<p:commandButton title="Adicionar" ajax="fasle"
 							actionListener="#{ServicoProdutoBean.adicionarProdutoAoServico(produto)}"
 							icon="ui-icon-plus" process="@this"
 							update=":formularioConsultaProduto, :mensagem" />

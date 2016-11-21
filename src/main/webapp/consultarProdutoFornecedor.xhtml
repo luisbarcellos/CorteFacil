@@ -37,7 +37,7 @@
 					<p:column width="20">
 						<p:commandButton title="Remover"
 							actionListener="#{ProdutoFornecedorBean.removerFornecedorDoProduto(fornecedor)}"
-							icon="ui-icon-minus" process="@this"
+							icon="ui-icon-minus" process="@this" ajax="fasle"
 							update=":formularioConsultaFornecedor, :mensagem">
 							<p:confirm header="Remover fornecedor"
 								message="Tem certeza que deseja remover o fornecedor do produto?"
@@ -75,7 +75,7 @@
                         #{fornecedor.email}
                 </p:column>
 					<p:column width="20">
-						<p:commandButton title="Adicionar"
+						<p:commandButton title="Adicionar" ajax="fasle"
 							actionListener="#{ProdutoFornecedorBean.adicionarFornecedorAoProduto(fornecedor)}"
 							icon="ui-icon-plus" process="@this"
 							update=":formularioConsultaFornecedor, :mensagem"/>
