@@ -118,6 +118,20 @@ public class OrdemServicoBean extends BaseBean implements Serializable {
 			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
 		}
 	}
+	
+	public void gerarRelatorioTodasOrdens(){
+		FacesContext context = FacesContext.getCurrentInstance();
+		String mensagem;
+		try {			
+			auxOrdemServicoEJB.gerarRelatorioTodasOrdens();
+			mensagem = context.getApplication().evaluateExpressionGet(context, "Relatório gerado com sucesso!",
+					String.class);
+			enviarMensagem(FacesMessage.SEVERITY_INFO, mensagem);
+		} catch (Exception e) {
+			mensagem = context.getApplication().evaluateExpressionGet(context, "Erro ao gerar relatório!", String.class);
+			enviarMensagem(FacesMessage.SEVERITY_ERROR, mensagem);
+		}
+	}
 	/*public void atualizar() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		String mensagem;
